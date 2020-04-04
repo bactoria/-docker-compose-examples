@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+  logstash:
+    build:
+      context: logstash/
+    command: bin/logstash -f /usr/share/logstash/pipeline/logstash.conf --config.reload.automatic
+    volumes:
+      - ./logstash/config:/usr/share/logstash/config:ro
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./logstash/patterns:/usr/share/logstash/patterns:ro
+      - ./nginx:/var/log/nginx:ro
+    ports:
+      - "5000:5000"
+      - "9600:9600"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
